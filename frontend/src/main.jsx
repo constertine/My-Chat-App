@@ -7,7 +7,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { store } from "./redux/store";
 
-export const serverUrl = "http://localhost:8000";
+export const serverUrl = process.env.VITE_SERVER_URL;
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
