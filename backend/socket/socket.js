@@ -11,9 +11,12 @@ const allowedOrigins = [
 ];
 
 const io = new Server(server,{
-    cors:{
-        origin:allowedOrigins
-    }
+  cors: {
+    origin: allowedOrigins,
+    credentials: true, // ← ADD THIS
+    methods: ["GET", "POST"]
+  }
+
 })
 
 const userSocketMap = {};

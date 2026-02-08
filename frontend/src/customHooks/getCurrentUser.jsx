@@ -1,28 +1,33 @@
 import axios from "axios"
 import { useEffect } from "react"
-import { serverUrl } from "../main"
+import { serverUrl } from "../config/config"
 import { useDispatch, useSelector } from "react-redux"
 import { setAuthLoading, setUserData } from "../redux/userSlice"
+import axiosInstance from "../api/axiosInstance"
 
-const getCurrentUser= () => {
+const useCurrentUser= () => {
     const dispatch = useDispatch();
     const { userData } = useSelector(state => state.user);
     
     useEffect(()=>{
-        if (userData) {
-            dispatch(setAuthLoading(false));
-            return;
-        }
+
         const fetchUser = async() =>{
             try {
+
+                const token = localStorage.getItem('token');
+                    if (!token) {
+                    dispatch(setUserData(null));
+                    dispatch(setAuthLoading(false));
+                    return;
+                    }
+
                 dispatch(setAuthLoading(true))
-                const result = await axios.get(`${serverUrl}/api/user/current`,{
-                    withCredentials:true,
-                })
+                const result = await axiosInstance.get('/api/user/current')
 
                 dispatch(setUserData(result.data));
             } catch (error) {
                 console.log(error);
+                localStorage.removeItem('token');
                 dispatch(setUserData(null));
             } finally{
                 dispatch(setAuthLoading(false))
@@ -32,4 +37,4 @@ const getCurrentUser= () => {
     },[])
 }
 
-export default getCurrentUser
+export default useCurrentUser

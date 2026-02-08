@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { serverUrl } from "../main";
+import { serverUrl } from "../config/config";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux"
 import { setUserData } from "../redux/userSlice";
+import axiosInstance from "../api/axiosInstance";
 
 function SignUp(){
     const navigate = useNavigate();
@@ -30,13 +31,15 @@ function SignUp(){
         e.preventDefault();
         setLoading(true);
         try {
-            let result = await axios.post(`${serverUrl}/api/auth/signup`,{
+            let result = await axiosInstance.post('/api/auth/signup',{
                 userName,email,password
-            }, {
-                withCredentials :true 
             })
 
-            dispatch(setUserData(result.data))
+            localStorage.setItem('token', result.data.token);
+    
+
+            dispatch(setUserData(result.data.user));
+
 
             setLoading(false);
             setErr("");

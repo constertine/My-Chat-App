@@ -10,9 +10,9 @@ import EmojiPicker from 'emoji-picker-react';
 import SenderMessage from "./SenderMessage";
 import ReceiverMessage from "./ReceiverMessage";
 import axios from "axios";
-import { serverUrl } from "../main";
 import { addMessage, setMessages } from "../redux/messageSlice";
 import { getSocket } from "../socket/socket";
+import axiosInstance from "../api/axiosInstance";
 
 
 function MessageArea(){
@@ -45,8 +45,8 @@ function MessageArea(){
           if(backendImage){
             formData.append("image", backendImage) 
           }
-          let result = await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,formData,
-            {withCredentials:true}
+          let result = await axiosInstance.post(`/api/message/send/${selectedUser._id}`,formData
+           
           )
 
           dispatch(addMessage(result.data));

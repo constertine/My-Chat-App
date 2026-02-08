@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { serverUrl } from "../main";
+import { serverUrl } from "../config/config";
 import { setUserData } from "../redux/userSlice";
+import axiosInstance from "../api/axiosInstance";
 
 
 function Profile(){
@@ -42,9 +43,7 @@ function Profile(){
           formData.append("image", backendImage);
         }
 
-        let result = await axios.put(`${serverUrl}/api/user/profile`, formData,{
-          withCredentials:true,
-        })
+        let result = await axiosInstance.put(`/api/user/profile`, formData)
 
         setSaving(false);
         dispatch(setUserData(result.data))

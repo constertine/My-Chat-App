@@ -5,9 +5,9 @@ import { LuUserSearch } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { CiLogout } from "react-icons/ci";
 import axios from "axios";
-import { serverUrl } from "../main";
 import { setOtherUsers, setSearchData, setSelectedUser, setUserData } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/axiosInstance";
 
 function Sidebar(){
     const {userData,otherUsers,onlineUsers,searchData} = useSelector(state => state.user);
@@ -19,24 +19,21 @@ function Sidebar(){
 
     const handleLogout = async() => {
         try {
-            let result = await axios.get(`${serverUrl}/api/auth/logout`,{
-                withCredentials:true
-            })
+            let result = await axiosInstance.get('/api/auth/logout')
 
-
+            localStorage.removeItem('token');
             dispatch(setUserData(null));
             dispatch(setOtherUsers(null));
             navigate("/login");
         } catch (error) {
+            localStorage.removeItem('token');
             console.log(error);
         }
     }
 
     const handleSearch = async() => {
         try {
-            let result = await axios.get(`${serverUrl}/api/user/search?query=${input}`,{
-                withCredentials:true
-            })
+            let result = await axiosInstance.get(`/api/user/search?query=${input}`)
 
             dispatch(setSearchData(result.data));
             

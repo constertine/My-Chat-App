@@ -1,9 +1,10 @@
 import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { serverUrl } from "../main";
+import { serverUrl } from "../config/config";
 import { useDispatch } from "react-redux";
 import { setSelectedUser, setUserData } from "../redux/userSlice";
+import axiosInstance from "../api/axiosInstance";
 
 function Login(){
     const navigate = useNavigate();
@@ -30,14 +31,13 @@ function Login(){
         e.preventDefault();
         setLoading(true);
         try {
-            let result = await axios.post(`${serverUrl}/api/auth/login`,{
+            let result = await axiosInstance.post('/api/auth/login',{
                 email,password
-            }, {
-                withCredentials :true 
             })
 
+         localStorage.setItem('token', result.data.token);
+            dispatch(setUserData(result.data.user));
 
-            dispatch(setUserData(result.data));
             dispatch(setSelectedUser(null))
             // console.log(result);
             setLoading(false);
@@ -46,7 +46,7 @@ function Login(){
             setPassword("");
             navigate("/")
 
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             console.log(error);
             setLoading(false);

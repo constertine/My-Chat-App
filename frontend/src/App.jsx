@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
-import getCurrentUser from "./customHooks/getCurrentUser";
+import useCurrentUser from "./customHooks/getCurrentUser";
 import { useDispatch, useSelector } from "react-redux";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import getOtherUsers from "./customHooks/getOtherUsers";
+import useOtherUsers from "./customHooks/getOtherUsers";
 import {io}  from "socket.io-client"
-import { serverUrl } from "./main";
+import { serverUrl } from "./config/config";
 import { initSocket } from "./socket/socket";
 import { setOnineUsers} from "./redux/userSlice";
 import Spinner from "./components/Spinner";
@@ -20,8 +20,8 @@ function App(){
     const {userData,authLoading} = useSelector(state=>state.user);
     const dispatch = useDispatch();
 
-    getCurrentUser();
-    getOtherUsers();
+    useCurrentUser();
+    useOtherUsers();
   
 
     useEffect(() => {
