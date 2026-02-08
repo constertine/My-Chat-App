@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://chat-app-silk-ten-63.vercel.app"
+  "https://chat-app-silk-ten-63.vercel.app",
+  "https://my-chat-app-ten-jet.vercel.app"
 ];
 
 app.use(cors({
